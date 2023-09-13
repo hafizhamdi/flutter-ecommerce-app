@@ -3,6 +3,12 @@ import 'package:flutter_ecommerce_app/constants/color.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 
 class SearchBox extends StatelessWidget {
+  const SearchBox(
+      {super.key, required this.controller, required this.onChanged});
+
+  final TextEditingController controller;
+  final Function(String) onChanged;
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -17,10 +23,11 @@ class SearchBox extends StatelessWidget {
                   ),
             ),
             child: TextFormField(
-              
+              onChanged: onChanged,
+              controller: controller,
               cursorColor: kPrimaryColor,
               decoration: InputDecoration(
-                hintText: 'Search here',
+                  hintText: 'Search here',
                   border: InputBorder.none,
                   fillColor: Colors.red,
                   prefixIcon: Icon(PhosphorIcons.regular.magnifyingGlass)),

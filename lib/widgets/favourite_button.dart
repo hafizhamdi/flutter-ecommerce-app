@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 
 class FavouriteButton extends StatefulWidget {
+  const FavouriteButton({super.key});
+
+  @override
   _FavouriteButton createState() => _FavouriteButton();
 }
 
@@ -14,7 +17,6 @@ class _FavouriteButton extends State<FavouriteButton> {
 
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
     return GestureDetector(
       onTap: _changeScale,
       child: AnimatedScale(

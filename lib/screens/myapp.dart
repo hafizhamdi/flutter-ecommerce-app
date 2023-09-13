@@ -8,11 +8,21 @@ import 'package:phosphor_flutter/phosphor_flutter.dart';
 import '../widgets/widget.dart';
 
 class MyApp extends StatefulWidget {
+  const MyApp({super.key});
+
   _MyApp createState() => _MyApp();
 }
 
 class _MyApp extends State<MyApp> {
   List<int> _listFavourite = [];
+  TextEditingController _searchController = TextEditingController();
+  String _searchText = "";
+
+  @override
+  void dispose() {
+    _searchController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -34,10 +44,23 @@ class _MyApp extends State<MyApp> {
                       fontWeight: kFontWeight700)),
               actions: [CartButton(onPressed: () {})],
             ),
-            SliverToBoxAdapter(child: SearchBox()),
+            SliverToBoxAdapter(
+                child: SearchBox(
+              controller: _searchController,
+              onChanged: (value) {
+                setState(() {
+                  _searchText = value;
+                });
+              },
+            )),
             BlocBuilder<ProductBloc, ProductState>(builder: (context, state) {
               if (state is LoadedProduct) {
-                final data = state.data.products;
+                final products = state.data.products;
+                final data = products!
+                    .where((e) => "${e.brand},${e.title},${e.description}"
+                        .toLowerCase()
+                        .contains(_searchText.toLowerCase()))
+                    .toList();
 
                 return SliverGrid(
                   gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
@@ -67,7 +90,7 @@ class _MyApp extends State<MyApp> {
                   ),
                 );
               }
-              return SliverToBoxAdapter(child: EmptyProducts());
+              return const SliverToBoxAdapter(child: EmptyProducts());
             })
           ],
         ),
@@ -77,6 +100,8 @@ class _MyApp extends State<MyApp> {
 }
 
 class SearchResult extends StatelessWidget {
+  const SearchResult({super.key});
+
   @override
   Widget build(BuildContext context) {
     return MediaQuery.removePadding(
