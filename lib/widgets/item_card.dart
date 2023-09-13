@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_ecommerce_app/widgets/favourite_button.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 
 import '../constants/constant.dart';
@@ -66,12 +67,7 @@ class ItemCard extends StatelessWidget {
                       style: TextStyle(
                           fontWeight: kFontWeight700, color: Colors.red),
                     ),
-                    InkWell(
-                      child: Icon(isFavourite
-                          ? PhosphorIcons.fill.heart
-                          : PhosphorIcons.regular.heart),
-                      onTap: favOnPressed,
-                    )
+                    FavouriteButton(),
                   ]),
             ),
             Padding(
@@ -86,6 +82,7 @@ class ItemCard extends StatelessWidget {
               padding: EdgeInsets.symmetric(horizontal: 6),
               child: Text(
                 "$brand",
+                style: TextStyle(fontSize: 12),
                 overflow: TextOverflow.ellipsis,
               ),
             ),
