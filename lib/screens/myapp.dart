@@ -7,8 +7,12 @@ import 'package:phosphor_flutter/phosphor_flutter.dart';
 
 import '../widgets/widget.dart';
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+class MyApp extends StatefulWidget {
+  _MyApp createState() => _MyApp();
+}
+
+class _MyApp extends State<MyApp> {
+  List<int> _listFavourite = [];
 
   @override
   Widget build(BuildContext context) {
@@ -41,11 +45,23 @@ class MyApp extends StatelessWidget {
 
                     mainAxisSpacing: 10.0,
                     // crossAxisSpacing: 10.0,
-                    childAspectRatio: 0.8,
+                    childAspectRatio: 0.9,
                   ),
                   delegate: SliverChildBuilderDelegate(
                     (BuildContext context, int index) {
-                      return ItemCard(data: data[index]);
+                      return ItemCard(
+                        isFavourite: _listFavourite.contains(data[index].id),
+                        data: data[index],
+                        favOnPressed: () {
+                          setState(() {
+                            if (!_listFavourite.contains(data[index].id)) {
+                              _listFavourite.add(data[index].id!);
+                            } else {
+                              _listFavourite.remove(data[index].id);
+                            }
+                          });
+                        },
+                      );
                     },
                     childCount: data!.length,
                   ),

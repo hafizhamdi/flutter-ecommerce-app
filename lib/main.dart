@@ -8,5 +8,5 @@ void main() {
     BlocProvider(
       create: (context) => ProductBloc()..add(FetchedAllProduct()),
     ),
-  ], child: const MyApp()));
+  ], child: MyApp()));
 }
