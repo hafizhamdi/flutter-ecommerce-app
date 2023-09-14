@@ -1,9 +1,12 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_ecommerce_app/blocs/product_bloc.dart';
 import 'package:flutter_ecommerce_app/constants/constant.dart';
 import 'package:flutter_ecommerce_app/widgets/empty_products.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
+import 'package:provider/provider.dart';
 
 import '../widgets/widget.dart';
 
@@ -26,6 +29,7 @@ class _MyApp extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
+    final productBloc = Provider.of<ProductBloc>(context);
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
@@ -47,21 +51,23 @@ class _MyApp extends State<MyApp> {
             SliverToBoxAdapter(
                 child: SearchBox(
               controller: _searchController,
-              onChanged: (value) {
+              onEditingComplete: () {
                 setState(() {
-                  _searchText = value;
+                  _searchText = _searchController.text;
+                  log("searchText=$_searchText");
                 });
+
+                productBloc.add(SearchedAllProduct(query: _searchText));
               },
             )),
             BlocBuilder<ProductBloc, ProductState>(builder: (context, state) {
               if (state is LoadedProduct) {
-                final products = state.data.products;
-                final data = products!
-                    .where((e) => "${e.brand},${e.title},${e.description}"
-                        .toLowerCase()
-                        .contains(_searchText.toLowerCase()))
-                    .toList();
+                final data = state.data!.products;
 
+                //search not found
+                if (state.data!.total == 0) {
+                  return const SliverToBoxAdapter(child: EmptyProducts());
+                }
                 return SliverGrid(
                   gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                     crossAxisCount: 2,
@@ -90,6 +96,11 @@ class _MyApp extends State<MyApp> {
                   ),
                 );
               }
+
+              if (state is LoadingProduct) {
+                return const SliverToBoxAdapter(child: Loading());
+              }
+
               return const SliverToBoxAdapter(child: EmptyProducts());
             })
           ],

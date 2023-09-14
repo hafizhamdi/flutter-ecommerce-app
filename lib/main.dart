@@ -6,7 +6,9 @@ import 'package:flutter_ecommerce_app/screens/myapp.dart';
 void main() {
   runApp(MultiBlocProvider(providers: [
     BlocProvider(
-      create: (context) => ProductBloc()..add(FetchedAllProduct()),
+      create: (context) => ProductBloc()
+        ..add(SearchedAllProduct()) //fetching all products
+        ..add(RetrievedCategories()), //fetching all categories available
     ),
   ], child: MyApp()));
 }

@@ -2,6 +2,7 @@
 import 'dart:convert';
 import 'dart:developer';
 
+import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_ecommerce_app/models/result_product.dart';
 import 'package:flutter_ecommerce_app/network/client.dart';
@@ -9,66 +10,137 @@ import 'package:flutter_ecommerce_app/network/dummy_repository.dart';
 
 import '../constants/string.dart';
 
-abstract class ProductState {}
+abstract class ProductState extends Equatable {
+  final ResultProduct? data;
+  final List<String>? categories;
+
+  const ProductState({this.data, this.categories});
+  @override
+  List<Object?> get props => [data, categories];
+}
 
 abstract class ProductEvent {}
 
 //state
-class InitialProduct extends ProductState {}
+class InitialProduct extends ProductState {
+  @override
+  // TODO: implement props
+  List<Object?> get props => throw UnimplementedError();
+}
 
-class LoadingProduct extends ProductState {}
+class LoadingProduct extends ProductState {
+  @override
+  // TODO: implement props
+  List<Object?> get props => [];
+}
 
 class LoadedProduct extends ProductState {
-  final ResultProduct data;
+  final ResultProduct? data;
+  final List<String>? categories;
 
-  LoadedProduct({required this.data});
+  const LoadedProduct({this.data, this.categories});
+
+  @override
+  List<Object?> get props => [data];
 }
 
-class ErrorProduct extends ProductState {}
+class LoadedCategories extends ProductState {
+  final List<String> categories;
 
-class FailedProduct extends ProductState {}
+  const LoadedCategories({required this.categories});
+
+  @override
+  List<Object?> get props => [categories];
+}
+
+class ErrorProduct extends ProductState {
+  @override
+  // TODO: implement props
+  List<Object?> get props => [];
+}
+
+class FailedProduct extends ProductState {
+  @override
+  // TODO: implement props
+  List<Object?> get props => [];
+}
 
 //event
-class FetchedAllProduct extends ProductEvent {}
+class SearchedAllProduct extends ProductEvent {
+  final String? query;
 
-class FetchedProductId extends ProductEvent {
+  SearchedAllProduct({this.query = ""});
+}
+
+class SearchedProductId extends ProductEvent {
   final int id;
 
-  FetchedProductId({required this.id});
+  SearchedProductId({required this.id});
 }
+
+class RetrievedCategories extends ProductEvent {}
 
 //bloc
 class ProductBloc extends Bloc<ProductEvent, ProductState> {
   ProductBloc() : super(InitialProduct()) {
-    on(_onFetchedAllProduct);
-    // on(_onFetchedByProductId);
+    on<SearchedAllProduct>(_onSearchedAllProduct);
+    on<RetrievedCategories>(_onRetrievedCategories);
+    // on(_onSearchedByProductId);
   }
 
-  _onFetchedAllProduct(
-      FetchedAllProduct event, Emitter<ProductState> emit) async {
+  _onSearchedAllProduct(
+      SearchedAllProduct event, Emitter<ProductState> emit) async {
     emit(LoadingProduct());
 
     var client = NetworkClient(baseUrl: DUMMY_BASE_URL);
     var dummyRepository = DummyRepository(client: client);
 
+    var response;
     try {
-      var response = await dummyRepository.findAllProduct();
-      log(response);
-
+      // search product by query
+      if (event.query!.isNotEmpty) {
+        response = await dummyRepository.findProductByQuery(event.query!);
+        log(response);
+      } else {
+        // search all products
+        response = await dummyRepository.findAllProduct();
+        log(response);
+      }
       emit(
         LoadedProduct(
           data: ResultProduct.fromJson(jsonDecode(response)),
         ),
       );
     } catch (err) {
-      print(err);
       log(err.toString());
       emit(ErrorProduct());
     }
   }
 
-  // _onFetchedByProductId(
-  //     FetchedProductId event, Emitter<ProductState> emit) async {
+  _onRetrievedCategories(
+      RetrievedCategories event, Emitter<ProductState> emit) async {
+    emit(LoadingProduct());
+
+    var client = NetworkClient(baseUrl: DUMMY_BASE_URL);
+    var dummyRepository = DummyRepository(client: client);
+
+    try {
+      var response = await dummyRepository.findProductCategories();
+      var json = jsonDecode(response);
+      log(response);
+
+      emit(
+        LoadedProduct(
+            data: state.data, categories: List<String>.from(json).toList()),
+      );
+    } catch (err) {
+      log(err.toString());
+      emit(ErrorProduct());
+    }
+  }
+
+  // _onSearchedByProductId(
+  //     SearchedProductId event, Emitter<ProductState> emit) async {
   //   emit(LoadingProduct());
   //   try {
   //     var response = dummyRepository.findProductById(event.id);

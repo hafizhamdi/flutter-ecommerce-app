@@ -14,4 +14,16 @@ class DummyRepository {
     var result = await client.get(endpoint: "/products/$id");
     return result.body;
   }
+  findProductByQuery(String query) async {
+    var result = await client.get(endpoint: "/products/search?q=$query");
+    return result.body;
+  }
+  findProductCategories() async {
+    var result = await client.get(endpoint: "/products/categories");
+    return result.body;
+  }
+  findProductByCategory(String category) async {
+    var result = await client.get(endpoint: "/products/category/$category");
+    return result.body;
+  }
 }

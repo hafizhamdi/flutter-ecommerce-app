@@ -4,10 +4,11 @@ import 'package:phosphor_flutter/phosphor_flutter.dart';
 
 class SearchBox extends StatelessWidget {
   const SearchBox(
-      {super.key, required this.controller, required this.onChanged});
+      {super.key, required this.controller, required this.onEditingComplete});
 
   final TextEditingController controller;
-  final Function(String) onChanged;
+  // final Function(String) onChanged;
+  final Function() onEditingComplete;
 
   @override
   Widget build(BuildContext context) {
@@ -23,7 +24,8 @@ class SearchBox extends StatelessWidget {
                   ),
             ),
             child: TextFormField(
-              onChanged: onChanged,
+              onEditingComplete: onEditingComplete,
+              // onChanged: onChanged,
               controller: controller,
               cursorColor: kPrimaryColor,
               decoration: InputDecoration(

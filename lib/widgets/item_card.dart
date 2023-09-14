@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_ecommerce_app/widgets/rating.dart';
 import '../widgets/widget.dart';
 import '../constants/constant.dart';
 import '../models/result_product.dart';
@@ -19,6 +20,7 @@ class ItemCard extends StatelessWidget {
     final discountPercentage = data.discountPercentage;
     final title = data.title;
     final brand = data.brand;
+    final rating = data.rating;
     final priceBeforeDiscount =
         _calcPriceBeforeDiscount(price!, discountPercentage!);
 
@@ -64,7 +66,8 @@ class ItemCard extends StatelessWidget {
                       style:const TextStyle(
                           fontWeight: kFontWeight700, color: Colors.red),
                     ),
-                    FavouriteButton(),
+                    Rating(rating: rating!)
+                    // FavouriteButton(),
                   ]),
             ),
             Padding(

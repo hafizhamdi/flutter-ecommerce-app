@@ -15,7 +15,7 @@ class EmptyProducts extends StatelessWidget {
         const SizedBox(
           height: 10,
         ),
-        const Text("No product at the moment")
+        const Text("Let's try search a new keyword")
       ]),
     );
   }
