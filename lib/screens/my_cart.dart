@@ -2,11 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_ecommerce_app/blocs/mycart_bloc.dart';
+import 'package:flutter_ecommerce_app/services/local_nofitication.dart';
 import 'package:flutter_ecommerce_app/widgets/widget.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 
 import '../constants/color.dart';
 import '../models/result_product.dart';
+import '../widgets/pay_button.dart';
 
 class MyCartScreen extends StatelessWidget {
   @override
@@ -29,6 +32,18 @@ class MyCartScreen extends StatelessWidget {
         }
         return const SliverToBoxAdapter(child: EmptyCart());
       }),
+
+      const SliverToBoxAdapter(
+          child: SizedBox(
+        height: 20,
+      )),
+
+      SliverToBoxAdapter(
+          child: Padding(
+            padding: const EdgeInsets.all(10),
+            child:PayButton(
+        onPressed: () {},
+      )))
     ]));
   }
 }
@@ -57,7 +72,7 @@ class SliverCartList extends StatelessWidget {
                   PhosphorIcons.regular.trash,
                   color: kPrimaryColor,
                 ),
-                onPressed: () {
+                onPressed: () async {
                   context.read<MyCartBloc>().add(RemoveCart(index: index));
 
                   final snackBar = SnackBar(
@@ -65,6 +80,9 @@ class SliverCartList extends StatelessWidget {
                   );
 
                   ScaffoldMessenger.of(context).showSnackBar(snackBar);
+
+                  LocalNotification.localNotification.showLocalNotification(
+                      "Item Cart is removed", "${item.title} is removed");
                 }),
           );
         });

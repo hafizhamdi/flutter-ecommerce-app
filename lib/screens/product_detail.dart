@@ -9,6 +9,7 @@ import 'package:flutter_ecommerce_app/widgets/add_to_cart.dart';
 import 'package:flutter_ecommerce_app/widgets/favourite_button.dart';
 
 import '../constants/font.dart';
+import '../services/local_nofitication.dart';
 import '../widgets/rating.dart';
 
 class ProductDetailScreen extends StatelessWidget {
@@ -175,6 +176,9 @@ class ProductDescription extends StatelessWidget {
               );
 
               ScaffoldMessenger.of(context).showSnackBar(snackBar);
+
+              LocalNotification.localNotification.showLocalNotification(
+                  "Item Cart is added", "${item.title} is added");
 
               Navigator.pop(context);
             })
