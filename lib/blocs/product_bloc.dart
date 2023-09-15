@@ -17,15 +17,18 @@ abstract class ProductState extends Equatable {
   const ProductState({this.data, this.categories});
   @override
   List<Object?> get props => [data, categories];
+
+  @override
+  bool get stringify => true;
 }
 
-abstract class ProductEvent {}
+abstract class ProductEvent extends Equatable {}
 
 //state
 class InitialProduct extends ProductState {
   @override
   // TODO: implement props
-  List<Object?> get props => throw UnimplementedError();
+  List<Object?> get props => [];
 }
 
 class LoadingProduct extends ProductState {
@@ -41,7 +44,7 @@ class LoadedProduct extends ProductState {
   const LoadedProduct({this.data, this.categories});
 
   @override
-  List<Object?> get props => [data];
+  List<Object?> get props => [data, categories];
 }
 
 class LoadedCategories extends ProductState {
@@ -70,22 +73,44 @@ class SearchedAllProduct extends ProductEvent {
   final String? query;
 
   SearchedAllProduct({this.query = ""});
+
+  @override
+  List<Object?> get props => [query];
 }
 
 class SearchedProductId extends ProductEvent {
   final int id;
 
   SearchedProductId({required this.id});
+  @override
+  List<Object?> get props => [id];
 }
 
-class RetrievedCategories extends ProductEvent {}
+class RetrievedCategories extends ProductEvent {
+  final ResultProduct? data;
+
+  RetrievedCategories({this.data});
+
+  @override
+  List<Object?> get props => [data];
+}
+
+class SearchedByCategory extends ProductEvent {
+  final String category;
+
+  SearchedByCategory({required this.category});
+  @override
+  List<Object?> get props => [category];
+}
 
 //bloc
 class ProductBloc extends Bloc<ProductEvent, ProductState> {
   ProductBloc() : super(InitialProduct()) {
     on<SearchedAllProduct>(_onSearchedAllProduct);
-    on<RetrievedCategories>(_onRetrievedCategories);
+    // on<RetrievedCategories>(_onRetrievedCategories);
+    on<SearchedByCategory>(_onSearchByCategory);
     // on(_onSearchedByProductId);
+
   }
 
   _onSearchedAllProduct(
@@ -100,38 +125,44 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
       // search product by query
       if (event.query!.isNotEmpty) {
         response = await dummyRepository.findProductByQuery(event.query!);
-        log(response);
+        // log(response);
       } else {
         // search all products
         response = await dummyRepository.findAllProduct();
-        log(response);
+        // log(response);
       }
-      emit(
-        LoadedProduct(
-          data: ResultProduct.fromJson(jsonDecode(response)),
-        ),
-      );
+
+      var catResponse = await dummyRepository.findProductCategories();
+
+      //     data: ResultProduct.fromJson(jsonDecode(response))));
+      emit(LoadedProduct(
+          data: ResultProduct.fromJson(
+            jsonDecode(response),
+          ),
+          categories: List<String>.from(jsonDecode(catResponse)).toList()));
     } catch (err) {
       log(err.toString());
       emit(ErrorProduct());
     }
   }
 
-  _onRetrievedCategories(
-      RetrievedCategories event, Emitter<ProductState> emit) async {
+  _onSearchByCategory(
+      SearchedByCategory event, Emitter<ProductState> emit) async {
     emit(LoadingProduct());
 
     var client = NetworkClient(baseUrl: DUMMY_BASE_URL);
     var dummyRepository = DummyRepository(client: client);
 
     try {
-      var response = await dummyRepository.findProductCategories();
+      var response =
+          await dummyRepository.findProductByCategory(event.category);
       var json = jsonDecode(response);
       log(response);
+      log("test=${state.categories}");
 
       emit(
         LoadedProduct(
-            data: state.data, categories: List<String>.from(json).toList()),
+            data: ResultProduct.fromJson(json), categories: state.categories),
       );
     } catch (err) {
       log(err.toString());

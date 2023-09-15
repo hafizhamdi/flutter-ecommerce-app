@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_ecommerce_app/blocs/product_bloc.dart';
 import 'package:flutter_ecommerce_app/constants/constant.dart';
+import 'package:flutter_ecommerce_app/widgets/category.dart';
 import 'package:flutter_ecommerce_app/widgets/empty_products.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 import 'package:provider/provider.dart';
@@ -17,7 +18,7 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyApp extends State<MyApp> {
-  List<int> _listFavourite = [];
+  // List<int> _listFavourite = [];
   TextEditingController _searchController = TextEditingController();
   String _searchText = "";
 
@@ -60,6 +61,11 @@ class _MyApp extends State<MyApp> {
                 productBloc.add(SearchedAllProduct(query: _searchText));
               },
             )),
+            // const SliverToBoxAdapter(child: Category()),
+            const SliverToBoxAdapter(
+                child: SizedBox(
+              height: 10,
+            )),
             BlocBuilder<ProductBloc, ProductState>(builder: (context, state) {
               if (state is LoadedProduct) {
                 final data = state.data!.products;
@@ -79,17 +85,17 @@ class _MyApp extends State<MyApp> {
                   delegate: SliverChildBuilderDelegate(
                     (BuildContext context, int index) {
                       return ItemCard(
-                        isFavourite: _listFavourite.contains(data[index].id),
+                        // isFavourite: _listFavourite.contains(data[index].id),
                         data: data[index],
-                        favOnPressed: () {
-                          setState(() {
-                            if (!_listFavourite.contains(data[index].id)) {
-                              _listFavourite.add(data[index].id!);
-                            } else {
-                              _listFavourite.remove(data[index].id);
-                            }
-                          });
-                        },
+                        // favOnPressed: () {
+                        // setState(() {
+                        //   if (!_listFavourite.contains(data[index].id)) {
+                        //     _listFavourite.add(data[index].id!);
+                        //   } else {
+                        //     _listFavourite.remove(data[index].id);
+                        //   }
+                        // });
+                        // },
                       );
                     },
                     childCount: data!.length,
