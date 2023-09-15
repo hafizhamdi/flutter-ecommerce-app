@@ -1,6 +1,8 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_ecommerce_app/blocs/mycart_bloc.dart';
 import 'package:flutter_ecommerce_app/constants/color.dart';
 import 'package:flutter_ecommerce_app/models/result_product.dart';
 import 'package:flutter_ecommerce_app/widgets/add_to_cart.dart';
@@ -165,7 +167,17 @@ class ProductDescription extends StatelessWidget {
             const SizedBox(
               height: 30,
             ),
-            AddToCart(onPressed: () {})
+            AddToCart(onPressed: () {
+              context.read<MyCartBloc>().add(AddCart(cart: item));
+
+              final snackBar = SnackBar(
+                content: Text('1 item added in cart'),
+              );
+
+              ScaffoldMessenger.of(context).showSnackBar(snackBar);
+
+              Navigator.pop(context);
+            })
           ],
         ));
   }

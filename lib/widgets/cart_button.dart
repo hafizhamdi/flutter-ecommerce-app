@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_ecommerce_app/blocs/mycart_bloc.dart';
+import 'package:flutter_ecommerce_app/screens/my_cart.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 
 class CartButton extends StatelessWidget {
@@ -8,11 +11,19 @@ class CartButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    final cartCounts = context.watch<MyCartBloc>().state.addedCarts.length;
+    return GestureDetector(
+      onTap: () {
+        Navigator.push(
+            context, MaterialPageRoute(builder: (context) => MyCartScreen()));
+      },
+      child: Container(
         padding: const EdgeInsets.all(20),
         child: Badge(
-          label: const Text("3"),
+          label: Text("$cartCounts"),
           child: Icon(PhosphorIcons.regular.shoppingCartSimple),
-        ));
+        ),
+      ),
+    );
   }
 }

@@ -5,10 +5,11 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_ecommerce_app/blocs/product_bloc.dart';
 import 'package:flutter_ecommerce_app/constants/constant.dart';
 import 'package:flutter_ecommerce_app/widgets/category.dart';
-import 'package:flutter_ecommerce_app/widgets/empty_products.dart';
+import 'package:flutter_ecommerce_app/widgets/empty_cart.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 import 'package:provider/provider.dart';
 
+import '../widgets/empty_products.dart';
 import '../widgets/widget.dart';
 
 class MyApp extends StatefulWidget {
