@@ -14,7 +14,6 @@ import '../widgets/pay_button.dart';
 class MyCartScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    // final listProducts = context.watch<MyCartBloc>().state.addedCarts;
     return Scaffold(
         body: CustomScrollView(slivers: [
       const SliverAppBar(
@@ -22,9 +21,6 @@ class MyCartScreen extends StatelessWidget {
         centerTitle: true,
         title: Text("My Cart", style: TextStyle(color: Colors.white)),
       ),
-
-      //   // actions: [CartButton(onPressed: () {})
-      // ),
       BlocBuilder<MyCartBloc, MyCartState>(builder: (context, state) {
         if (state.addedCarts.isNotEmpty) {
           debugPrint(state.addedCarts.length.toString());
@@ -32,18 +28,16 @@ class MyCartScreen extends StatelessWidget {
         }
         return const SliverToBoxAdapter(child: EmptyCart());
       }),
-
       const SliverToBoxAdapter(
           child: SizedBox(
         height: 20,
       )),
-
       SliverToBoxAdapter(
           child: Padding(
-            padding: const EdgeInsets.all(10),
-            child:PayButton(
-        onPressed: () {},
-      )))
+              padding: const EdgeInsets.all(10),
+              child: PayButton(
+                onPressed: () {},
+              )))
     ]));
   }
 }
@@ -75,7 +69,7 @@ class SliverCartList extends StatelessWidget {
                 onPressed: () async {
                   context.read<MyCartBloc>().add(RemoveCart(index: index));
 
-                  final snackBar = SnackBar(
+                  const snackBar = SnackBar(
                     content: Text('1 item removed in cart'),
                   );
 

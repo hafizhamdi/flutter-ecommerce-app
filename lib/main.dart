@@ -11,13 +11,17 @@ import 'package:path_provider/path_provider.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  //add hydrated to persist data
   HydratedBloc.storage = await HydratedStorage.build(
     storageDirectory: await getTemporaryDirectory(),
   );
+
+  //use to observe changes of state
   Bloc.observer = MyBlocObserver();
 
+  //initialize local notification
   await LocalNotification.localNotification.setup();
-  // await localNotification.setup();
 
   runApp(MultiBlocProvider(providers: [
     BlocProvider(

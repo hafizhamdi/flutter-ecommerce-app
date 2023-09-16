@@ -12,7 +12,7 @@ class CartButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final cartCounts = context.watch<MyCartBloc>().state.addedCarts.length;
-    return GestureDetector(
+    return InkWell(
       onTap: () {
         Navigator.push(
             context, MaterialPageRoute(builder: (context) => MyCartScreen()));

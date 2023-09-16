@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:phosphor_flutter/phosphor_flutter.dart';
 
-class EmptyProducts extends StatelessWidget {
-  const EmptyProducts({super.key});
+class SearchFeedback extends StatelessWidget {
+  final Icon icon;
+  final String alertMessage;
+
+  const SearchFeedback({super.key, required this.icon, required this.alertMessage});
 
   @override
   Widget build(BuildContext context) {
@@ -11,11 +13,11 @@ class EmptyProducts extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         children: [
          const SizedBox(height: 100,),
-        Icon(PhosphorIcons.regular.binoculars, size: 40,),
+        icon,
         const SizedBox(
           height: 10,
         ),
-        const Text("Let's try search a new keyword")
+         Text(alertMessage, textAlign: TextAlign.center,)
       ]),
     );
   }
