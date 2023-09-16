@@ -28,7 +28,7 @@ class SideDrawer extends StatelessWidget {
               showAboutDialog(
                   context: context,
                   applicationName: "Shopping Mart",
-                  applicationVersion: "Build for Femmily's Assesment Test 2023",
+                  applicationVersion: "Build for Femmily's Assesment Test 2023 \nby Hafiz Hamdi ",
                   applicationIcon: Icon(PhosphorIcons.regular.rocketLaunch));
               // Update the state of the app.
               // ...

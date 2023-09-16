@@ -57,6 +57,7 @@ class _HomeScreen extends State<HomeScreen> {
             height: 10,
           )),
           BlocBuilder<ProductBloc, ProductState>(builder: (context, state) {
+            final size = MediaQuery.of(context).size;
             if (state is LoadedProduct) {
               final data = state.data!.products;
 
@@ -70,8 +71,8 @@ class _HomeScreen extends State<HomeScreen> {
                 ));
               }
               return SliverGrid(
-                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2,
+                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: size.width > 500 ? 4 : 2,
 
                   mainAxisSpacing: 10.0,
                   // crossAxisSpacing: 10.0,
