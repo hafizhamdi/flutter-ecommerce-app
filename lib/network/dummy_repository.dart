@@ -1,11 +1,10 @@
+import 'package:flutter_ecommerce_app/constants/string.dart';
 import 'package:flutter_ecommerce_app/network/client.dart';
 
 class DummyRepository {
-  final NetworkClient client;
+  final NetworkClient client = NetworkClient(baseUrl: DUMMY_BASE_URL);
 
-  DummyRepository({required this.client});
-
-  findAllProduct() async{
+  findAllProduct() async {
     var result = await client.get(endpoint: "/products");
     return result.body;
   }
@@ -14,14 +13,17 @@ class DummyRepository {
     var result = await client.get(endpoint: "/products/$id");
     return result.body;
   }
+
   findProductByQuery(String query) async {
     var result = await client.get(endpoint: "/products/search?q=$query");
     return result.body;
   }
+
   findProductCategories() async {
     var result = await client.get(endpoint: "/products/categories");
     return result.body;
   }
+
   findProductByCategory(String category) async {
     var result = await client.get(endpoint: "/products/category/$category");
     return result.body;

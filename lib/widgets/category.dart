@@ -55,10 +55,25 @@ class Category extends StatelessWidget {
         return CatItem(
             title: newName, icon: Icon(PhosphorIcons.regular.laptop));
       case 'smartphones':
-        return CatItem(title: newName, icon: Icon(PhosphorIcons.regular.phone));
+        return CatItem(title: newName, icon: Icon(PhosphorIcons.regular.deviceMobile));
       case 'fragrances':
         return CatItem(
-            title: newName, icon: Icon(PhosphorIcons.regular.goodreadsLogo));
+            title: newName, icon: Icon(PhosphorIcons.regular.orangeSlice));
+      case 'skincare':
+        return CatItem(
+            title: newName, icon: Icon(PhosphorIcons.regular.eyeClosed));
+      case 'groceries':
+        return CatItem(
+            title: newName, icon: Icon(PhosphorIcons.regular.storefront));
+      case 'home-decoration':
+        return CatItem(
+            title: newName, icon: Icon(PhosphorIcons.regular.wrench));
+      case 'furniture':
+        return CatItem(
+            title: newName, icon: Icon(PhosphorIcons.regular.armchair));
+      case 'tops':
+        return CatItem(
+            title: newName, icon: Icon(PhosphorIcons.regular.baseballCap));
 
       default:
         return CatItem(title: newName, icon: Icon(PhosphorIcons.regular.alien));

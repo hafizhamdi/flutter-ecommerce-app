@@ -51,6 +51,7 @@ class _HomeScreen extends State<HomeScreen> {
               productBloc.add(SearchedAllProduct(query: _searchText));
             },
           )),
+          const SliverToBoxAdapter(child: Category()),
           const SliverToBoxAdapter(
               child: SizedBox(
             height: 10,
@@ -64,7 +65,8 @@ class _HomeScreen extends State<HomeScreen> {
                 return SliverToBoxAdapter(
                     child: SearchFeedback(
                   icon: Icon(PhosphorIcons.regular.binoculars, size: 40),
-                  alertMessage: "Search not found,\n Please try another keyword",
+                  alertMessage:
+                      "Search not found,\n Please try another keyword",
                 ));
               }
               return SliverGrid(
@@ -84,13 +86,9 @@ class _HomeScreen extends State<HomeScreen> {
                   childCount: data!.length,
                 ),
               );
-            }
-
-            if (state is LoadingProduct) {
+            } else if (state is LoadingProduct) {
               return const SliverToBoxAdapter(child: Loading());
-            }
-
-            if (state is ErrorProduct) {
+            } else if (state is ErrorProduct) {
               return SliverToBoxAdapter(
                   child: SearchFeedback(
                 icon: Icon(PhosphorIcons.regular.wifiSlash, size: 40),

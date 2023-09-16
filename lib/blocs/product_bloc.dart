@@ -105,20 +105,21 @@ class SearchedByCategory extends ProductEvent {
 
 //bloc
 class ProductBloc extends Bloc<ProductEvent, ProductState> {
+  var dummyRepository = DummyRepository();
+  var _category = <String>[];
+
   ProductBloc() : super(InitialProduct()) {
     on<SearchedAllProduct>(_onSearchedAllProduct);
     // on<RetrievedCategories>(_onRetrievedCategories);
     on<SearchedByCategory>(_onSearchByCategory);
     // on(_onSearchedByProductId);
-
   }
 
   _onSearchedAllProduct(
       SearchedAllProduct event, Emitter<ProductState> emit) async {
     emit(LoadingProduct());
 
-    var client = NetworkClient(baseUrl: DUMMY_BASE_URL);
-    var dummyRepository = DummyRepository(client: client);
+    var dummyRepository = DummyRepository();
 
     var response;
     try {
@@ -134,12 +135,12 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
 
       var catResponse = await dummyRepository.findProductCategories();
 
-      //     data: ResultProduct.fromJson(jsonDecode(response))));
+      _category = List<String>.from(jsonDecode(catResponse)).toList();
       emit(LoadedProduct(
           data: ResultProduct.fromJson(
             jsonDecode(response),
           ),
-          categories: List<String>.from(jsonDecode(catResponse)).toList()));
+          categories: _category));
     } catch (err) {
       log(err.toString());
       emit(ErrorProduct());
@@ -150,35 +151,20 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
       SearchedByCategory event, Emitter<ProductState> emit) async {
     emit(LoadingProduct());
 
-    var client = NetworkClient(baseUrl: DUMMY_BASE_URL);
-    var dummyRepository = DummyRepository(client: client);
-
     try {
       var response =
           await dummyRepository.findProductByCategory(event.category);
       var json = jsonDecode(response);
-      log(response);
-      log("test=${state.categories}");
+      // log(response);
+      // log("test=${state.categories}");
 
       emit(
         LoadedProduct(
-            data: ResultProduct.fromJson(json), categories: state.categories),
+            data: ResultProduct.fromJson(json), categories: _category),
       );
     } catch (err) {
       log(err.toString());
       emit(ErrorProduct());
     }
   }
-
-  // _onSearchedByProductId(
-  //     SearchedProductId event, Emitter<ProductState> emit) async {
-  //   emit(LoadingProduct());
-  //   try {
-  //     var response = dummyRepository.findProductById(event.id);
-
-  //     emit(LoadedProduct(data: Products.fromJson(response)));
-  //   } catch (err) {
-  //     emit(ErrorProduct());
-  //   }
-  // }
 }
