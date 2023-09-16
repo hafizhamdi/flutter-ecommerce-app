@@ -96,5 +96,9 @@ You can use the following endpoints in your app.
 - Handle receiving push notification after product is added to cart (Dont need to involve backend).
 
 ## Result
+![Screenshot #1](https://github.com/hafizhamdi/flutter-ecommerce-app/blob/master/assets/screenshots/pic2.jpeg?raw=true)
 
+![Screenshot #2](https://github.com/hafizhamdi/flutter-ecommerce-app/blob/master/assets/screenshots/pic3.jpeg?raw=true)
+
+![Screenshot #3](https://github.com/hafizhamdi/flutter-ecommerce-app/blob/master/assets/screenshots/pic1.jpeg?raw=true)
 
